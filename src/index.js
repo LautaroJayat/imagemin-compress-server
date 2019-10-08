@@ -39,7 +39,38 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/ajax', (req, res) => {
+    res.render('testing');
+});
 
+app.post('/ajax', async (req, res) => {
+    const file = req.file.path
+    const fileC = await imagemin([file], {
+        destination: path.join(__dirname, 'public'),
+        plugins: [
+            recomp({ method: "smallfry", target: 0.9, accurate: true, progressive: true })
+        ]
+    });
+    const fileCpath = fileC[0].destinationPath;
+    // Creating a new array for both compressed and uncompressed image file sizes
+    function uncompressedSize() {
+        fs.stat(path.join(file), (err, stat) => {
+            if (err) throw err;
+            console.log("\nCheck! Check!\nThesize of this file is ", stat.size);
+        });
+    };
+
+    function compressedSizes() {
+        fs.stat(path.join(fileCpath), (err, stat) => {
+            if (err) throw err;
+            console.log("But Dont worry\nThe compresed one is ", stat.size);
+        });
+    };
+    uncompressedSize();
+    compressedSizes();
+    res.sendStatus(201);
+
+});
 
 app.post('/post', async (req, res) => {
 
@@ -97,8 +128,3 @@ app.post('/post', async (req, res) => {
 
 
 });
-
-/*app.get('/delete', async (req, res) => {
-    await fs.unlink(app.get('file'), (err) => { if (err) throw err });
-    res.send('file deleted');
-});*/

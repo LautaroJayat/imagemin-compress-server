@@ -18,28 +18,72 @@
     <form action="/post" method="post" enctype="multipart/form-data">
         <input id="in" type="file" name="image">
         <hr>
-        <button type="submit">Upload</button>
-        <hr>
-        <a
-            href="https://github.com/oscarkey/cropper.js/blob/master/cropper.js">https://github.com/oscarkey/cropper.js/blob/master/cropper.js</a>
-        <br>
-        <a
-            href="https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/">https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/</a>
-        <br>
-        <a href="https://www.npmjs.com/package/imagemin">https://www.npmjs.com/package/imagemin</a>
-        <br>
-        <a href="https://github.com/imagemin/imagemin">https://github.com/imagemin/imagemin</a>
-        <br>
-        <a
-            href="https://www.npmjs.com/package/imagemin-jpeg-recompress">https://www.npmjs.com/package/imagemin-jpeg-recompress</a>
-        <br>
-        <a
-            href="https://github.com/danielgtaylor/jpeg-archive#image-comparison-metrics">https://github.com/danielgtaylor/jpeg-archive#image-comparison-metrics</a>
-        <br>
-        <a href="https://nodejs.org/api/fs.html">https://nodejs.org/api/fs.html</a>
-        <br>
-        <p></p>
+        <button type="submit">Upload to Server</button>
     </form>
+
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <form action="/post2" method="post">
+        <input type="hidden" name="AB" value="">
+        <button type="submit">submit</button>
+    </form>
+    <button onclick="makeArrayBuffer()">Make arrayBuffer</button>
+    <input type="file" name="file" id="file">
+    <button onclick="senditon()">send!</button>
+
+
+
+
+    <script>
+        var binaryData;
+        var formData = new FormData();
+        async function makeArrayBuffer() {
+            var file = document.getElementById("file").files[0]
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async function (e) {
+                binaryData = e.target.result;
+                console.log(binaryData);
+                var canv = new canvas();
+                
+            }
+        }
+        function senditon() {
+            formData.append('BUF', binaryData);
+            console.log(formData);
+            //fetch('/post2', { method: 'POST', body: formData, headers: { 'content-type': 'multipart/form-data' } });
+
+        }
+
+
+
+
+    </script>
+
+
+    <hr><br><br>
+    <a href="https://github.com/oscarkey/cropper.js/blob/master/cropper.js">
+        https://github.com/oscarkey/cropper.js/blob/master/cropper.js</a>
+    <br>
+    <a
+        href="https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/">https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/</a>
+    <br>
+    <a href="https://www.npmjs.com/package/imagemin">https://www.npmjs.com/package/imagemin</a>
+    <br>
+    <a href="https://github.com/imagemin/imagemin">https://github.com/imagemin/imagemin</a>
+    <br>
+    <a
+        href="https://www.npmjs.com/package/imagemin-jpeg-recompress">https://www.npmjs.com/package/imagemin-jpeg-recompress</a>
+    <br>
+    <a
+        href="https://github.com/danielgtaylor/jpeg-archive#image-comparison-metrics">https://github.com/danielgtaylor/jpeg-archive#image-comparison-metrics</a>
+    <br>
+    <a href="https://nodejs.org/api/fs.html">https://nodejs.org/api/fs.html</a>
+    <br>
+    <p></p>
+
 </body>
 
 </html>

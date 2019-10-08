@@ -1,0 +1,66 @@
+<head>
+</head>
+
+
+<body>
+    <input type="file" id="file" name="file">
+    <button id="toCanvas">ToCanvas</button>
+    <button id="toData">ToData</button>
+    <Button id="toServer">ToServer</Button>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    var binary;
+    var fileI = document.getElementById('file');
+    var toCanvas = document.getElementById('toCanvas');
+    var toData = document.getElementById('toData');
+    var toServer = document.getElementById('toServer');
+    var canvas = document.getElementById('canvas');
+
+    toCanvas.addEventListener('click', function () {
+        var reader = new FileReader();
+        reader.readAsDataURL(fileI.files[0]);
+        reader.onload = async function (e) {
+            var binaryData = await e.target.result;
+            var img = document.createElement('img');
+            img.style.display = "none";
+            img.id = "img";
+            document.body.append(img);
+            img.src = await binaryData;
+            var ctx = canvas.getContext('2d');
+            canvas.height = img.height; // 3
+            canvas.width = img.width; // 3;
+            await ctx.drawImage(img, 0, 0)//, img.width / 3, img.width / 3);
+
+        }
+    });
+
+    toData.addEventListener('click', async function () {
+        binary = await canvas.toDataURL('image/jpeg', 0.9);
+        await canvas.toBlob((blob) => { binary = blob; console.log(binary) }, 'image/jpeg', 0.95);
+        var newIm = document.createElement('img');
+        document.getElementById('img').remove();
+        newIm.src = binary;
+        canvas.remove();
+        document.body.append(newIm);
+    });
+
+    toServer.addEventListener('click', function () {
+        var FD = new FormData();
+        var name = new Date();
+        name = name.getTime();
+        name = name.toString();
+        FD.append('image', binary, name + ".jpeg");
+        fetch('/ajax', { method: "POST", body: FD })
+            .then(function (response) {
+                console.log('done');
+                return console.log(response);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        ;
+
+    });
+
+</script>
