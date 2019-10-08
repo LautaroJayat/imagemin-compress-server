@@ -17,7 +17,7 @@
     var toServer = document.getElementById('toServer');
     var canvas = document.getElementById('canvas');
 
-    toCanvas.addEventListener('click', function () {
+    toCanvas.addEventListener('click', async function () {
         var reader = new FileReader();
         reader.readAsDataURL(fileI.files[0]);
         reader.onload = async function (e) {
@@ -25,8 +25,8 @@
             var img = document.createElement('img');
             img.style.display = "none";
             img.id = "img";
-            document.body.append(img);
-            img.src = await binaryData;
+            img.src = binaryData;
+            await document.body.append(img);
             var ctx = canvas.getContext('2d');
             canvas.height = img.height; // 3
             canvas.width = img.width; // 3;
