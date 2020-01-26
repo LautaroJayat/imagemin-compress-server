@@ -28,17 +28,18 @@ ctrl.ajaxUpload = async (req, res) => {
             console.log("But Dont worry\nThe compresed one is ", stat.size);
         });
     };
-    uncompressedSize();
+    var compresedPath = fileC[0].destinationPath.substring(fileC[0].destinationPath.indexOf('public')).replace('public/', ""); uncompressedSize();
     compressedSizes();
-    res.sendStatus(201);
+    res.json({ "compressed": compresedPath });
+    res.end();
 
 }
 
 
-ctrl.upload =  async (req, res) => {
+ctrl.upload = async (req, res) => {
 
     // Creating a new array for both compressed and uncompressed image file sizes
-    var OutsideScopeVariable = [];
+    var sizes = [];
 
     // Require path and comppressing with imagemin
     const file = req.file.path
@@ -53,7 +54,7 @@ ctrl.upload =  async (req, res) => {
     var target1 = function (resolve, reject) {
         fs.stat(path.join(file), function (err, stat) {
             if (err) throw err;
-            resolve(OutsideScopeVariable.push(stat.size));
+            resolve(sizes.push(stat.size));
         });
     }
     // Creating the first promise in order to assign the first value to the array
@@ -63,7 +64,7 @@ ctrl.upload =  async (req, res) => {
     var target2 = function (resolve, reject) {
         fs.stat(path.join(fileC[0].destinationPath), function (err, stat) {
             if (err) throw err;
-            resolve(OutsideScopeVariable.push(stat.size));
+            resolve(sizes.push(stat.size));
         });
     }
     //  Creating the promise wich will be used after the first promise 
@@ -74,13 +75,17 @@ ctrl.upload =  async (req, res) => {
     ///
     ///     Running the promises and then sending the response to the client
     /// 
+    console.log(fileC[0].destinationPath.substring(fileC[0].destinationPath.indexOf('public')).replace('public/', ""));
+    var compresedPath = fileC[0].destinationPath.substring(fileC[0].destinationPath.indexOf('public')).replace('public/', "");
     pushing1.then(function (value) {
         pushing2.then(function (value) {
 
             //
             // Function what we are sending to the client 
-            res.send(`
-            The uncompressed file size is ${OutsideScopeVariable[0]} bytes.\n\nBut dont worry, the compressed one is ${OutsideScopeVariable[1]} bytes.\n\nHave a nice day.
+            res.write(`<p>
+            The uncompressed file size is ${sizes[0]} bytes.\n\nBut dont worry, the compressed one is ${sizes[1]} bytes.\n\nHave a nice day.
+            <p>
+            <img src=/${compresedPath}>
             `);
         })
     });

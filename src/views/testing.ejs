@@ -1,14 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Upload Using Ajax</title>
 </head>
 
-
 <body>
+    <a href="/">Upload using a form</a>
+    <br>
+    <br>
     <input type="file" id="file" name="file">
     <button id="toCanvas">ToCanvas</button>
     <button id="toData">ToData</button>
     <Button id="toServer">ToServer</Button>
     <canvas id="canvas"></canvas>
 </body>
+
 <script>
     var binary;
     var fileI = document.getElementById('file');
@@ -54,7 +64,13 @@
         fetch('/ajax', { method: "POST", body: FD })
             .then(function (response) {
                 console.log('done');
-                return console.log(response);
+                return response.json();
+            }).then(json => {
+                console.log(json);
+                oldImage = document.getElementsByTagName('img');
+                var newImage = document.createElement('img');
+                newImage.src = json.compressed;
+                document.body.replaceChild(newImage, oldImage[0]);
             })
             .catch(function (err) {
                 console.log(err);
@@ -64,3 +80,5 @@
     });
 
 </script>
+
+</html>
