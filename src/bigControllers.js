@@ -14,7 +14,9 @@ ctrl.ajaxUpload = async (req, res) => {
         ]
     });
     const fileCpath = fileC[0].destinationPath;
+
     // Creating a new array for both compressed and uncompressed image file sizes
+
     function uncompressedSize() {
         fs.stat(path.join(file), (err, stat) => {
             if (err) throw err;
@@ -23,15 +25,18 @@ ctrl.ajaxUpload = async (req, res) => {
     };
 
     function compressedSizes() {
-        fs.stat(path.join(fileCpath), (err, stat) => {
+        sizes = fs.stat(path.join(fileCpath), (err, stat) => {
             if (err) throw err;
             console.log("But Dont worry\nThe compresed one is ", stat.size);
+            var compresedPath = fileC[0].destinationPath.substring(fileC[0].destinationPath.indexOf('public')).replace('public/', ""); uncompressedSize();
+            let sizes = stat.size
+            res.json({ "compressed": compresedPath, 'size': sizes });
+            res.end();
+
         });
     };
-    var compresedPath = fileC[0].destinationPath.substring(fileC[0].destinationPath.indexOf('public')).replace('public/', ""); uncompressedSize();
     compressedSizes();
-    res.json({ "compressed": compresedPath });
-    res.end();
+
 
 }
 

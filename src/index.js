@@ -33,14 +33,14 @@ app.listen(app.get('port'), () => {
     console.log("server listening on", app.get('port'));
 });
 
-app.get('/', (req, res) => {
+app.get('/http', (req, res) => {
     res.render('index');
 });
 
-app.get('/ajax', (req, res) => {
+app.get('/', (req, res) => {
     res.render('testing');
 });
 
-app.post('/ajax', ctrl.ajaxUpload);
+app.post('/', ctrl.ajaxUpload);
 
 app.post('/post', ctrl.upload);
